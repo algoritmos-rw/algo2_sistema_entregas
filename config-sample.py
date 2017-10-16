@@ -10,6 +10,8 @@ SENDER_NAME = 'Entregas Algoritmos 1'
 EMAIL_TO = 'tps.7540rw@gmail.com'
 APP_TITLE = 'Algoritmos y Programación 1 - Entrega de TPs'
 
+REPO_ENTREGAS = ""
+
 SERVICE_ACCOUNT_CREDENTIALS = {
   "type": "service_account",
   "project_id": "...",
