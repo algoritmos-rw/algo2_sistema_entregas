@@ -64,10 +64,25 @@ def tiempo_siguiente_entrega(entregas):
     ultima entrega que hizo.
     Con tiempo base 3 minutos, el maximo backoff sera de unas 51 horas
     """
-    backoff = timedelta(seconds = TIEMPO_BASE * (2 ** len(entregas)))
+    backoff = timedelta(seconds = TIEMPO_BASE * (2 ** (len(entregas) - 1)))
     # Le sumo el delta a la ultima entrega
     return entregas[-1] + backoff
 
+def _validar_backoff_entregas(entregas, tiempo_actual):
+    """
+    Logica de la validacion. Recibe el tiempo actual para poder hacerlo 
+    testeable
+    """
+    # Si aun no hizo entregas, entonces cumple
+    if len(entregas) == 0:
+        return
+
+    # Me quedo con las ultimas entregas, para poner un máximo de tiempo
+    entregas = entregas[-ULTIMAS_ENTREGAS:]  
+    siguiente = tiempo_siguiente_entrega(entregas)
+
+    if  siguiente > datetime.today():
+        raise BackoffException("No puede hacer esta entrega hasta: " + str(siguiente))
 
 def validar_backoff(repo, planilla, tp, padron_o_grupo):
     """
@@ -82,16 +97,8 @@ def validar_backoff(repo, planilla, tp, padron_o_grupo):
     id_grupo = get_id_estudiante(planilla, padron_o_grupo)
 
     entregas = obtener_entregas(repo, tp, id_cursada, id_grupo)
-    # Me quedo con las ultimas entregas, para poner un máximo de tiempo
-    entregas = [-ULTIMAS_ENTREGAS:]
-    # Si aun no hizo entregas, entonces cumple
-    if len(entregas) == 0:
-        return
-    
-    backoff = tiempo_backoff(entregas)
-
-    if  backoff > datetime.today():
-        raise BackoffException("No puede hacer esta entrega hasta: " + str(backoff))
+    _validar_backoff_entregas(entregas, datetime.today())
 
 
-
+class BackoffException(Exception):
+    pass
