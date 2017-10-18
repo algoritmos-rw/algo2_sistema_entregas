@@ -101,4 +101,8 @@ def validar_backoff(repo, planilla, tp, padron_o_grupo):
 
 
 class BackoffException(Exception):
+    """
+    Excepcion que se lanza cuando no se cumplen los tiempos de espera del corrector,
+    luego de sucesivos intentos
+    """
     pass
