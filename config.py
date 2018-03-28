@@ -6,9 +6,9 @@ INDIVIDUAL = "i"
 
 SPREADSHEET_ID = os.environ['spreadsheet_id']
 ENTREGAS = OrderedDict([('TP0', INDIVIDUAL), ('VD', INDIVIDUAL), ('Pila', INDIVIDUAL) ])
-SENDER_NAME = 'Entregas Algoritmos 1'
-EMAIL_TO = 'tps.7540rw@gmail.com'
-APP_TITLE = 'Algoritmos y Programación 1 - Entrega de TPs'
+SENDER_NAME = 'Entregas Algoritmos 2'
+EMAIL_TO = 'tps.7541rw@gmail.com'
+APP_TITLE = 'Algoritmos y Programación 2 - Entrega de TPs'
 
 SERVICE_ACCOUNT_CREDENTIALS = {
     "type":                           "service_account",
