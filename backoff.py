@@ -1,6 +1,11 @@
 import os.path
-from datetime import datetime
+from datetime import datetime, timedelta
 
+SIN_PENALIDAD = 2
+ULTIMAS_ENTREGAS = 10
+# Por si acaso que algun error nuestro cause errores, permitimos desactivar el backoff,
+# aunque sea momentaneamente
+BACKOFF_ACTIVADO = True
 
 def get_id_cursada():
   """Devuelve el identificador de la cursada según año y cuatrimestre.
@@ -51,15 +56,63 @@ def obtener_entregas(repo, tp, id_cursada, id_grupo):
     log = repo.git.log("--format=%at", "--date=iso", rel_dir)
     return [datetime.fromtimestamp(int(date)) for date in log.split("\n")]
 
+def backoff(x):
+    """
+    Calcula el backoff (en horas) correspondiente a una cantidad de entregas
+    La funcion tiene la forma: 
+                        0                                   si x <= SIN_PENALIDAD
+        backoff(x) =    x - SIN_PENALIDAD                   si SIN_PEALIDAD < x < ULTIMAS_ENTREGAS
+                        ULTIMAS_ENTREGAS - SIN_PENALIDAD    en otro caso
+    
+    Siendo SIN_PENALIDAD = 2 y ULTIMAS_ENTREGAS = 10, 
+    Es la función lineal que empieza en x = 2, y termina en x = 10 con valor 8.
+    """
+    return 0 if x <= SIN_PENALIDAD else x - SIN_PENALIDAD
+
+def tiempo_siguiente_entrega(entregas):
+    """
+    Calcula el momento a partir del cual el alumno puede volver a hacer la entrega, 
+    teniendo en cuenta el backoff que tiene que cumplir el alumno respecto de la 
+    ultima entrega que hizo.
+    """
+    # Le sumo el delta a la ultima entrega
+    return entregas[-1] + timedelta(hours = backoff(len(entregas)))
+
+def _validar_backoff_entregas(entregas, tiempo_actual):
+    """
+    Logica de la validacion. Recibe el tiempo actual para poder hacerlo 
+    testeable
+    """
+    # Si aun no hizo entregas, entonces cumple
+    if len(entregas) == 0:
+        return
+
+    # Me quedo con las ultimas entregas, para poner un máximo de tiempo
+    entregas = entregas[-ULTIMAS_ENTREGAS:]  
+    siguiente = tiempo_siguiente_entrega(entregas)
+
+    if  siguiente > datetime.today():
+        raise BackoffException("No puede hacer esta entrega hasta: " + str(siguiente))
 
 def validar_backoff(repo, planilla, tp, padron_o_grupo):
     """
     Levanta una excepción de tipo BackoffException cuando un alumno o grupo
-    hacen demasiados intentos en muy poco tiempo para realizar una entrega.
+    hace demasiados intentos en muy poco tiempo para realizar una entrega.
     """
+    if not BACKOFF_ACTIVADO:
+        return
+
     tp = tp.lower()
     id_cursada = get_id_cursada()
     id_grupo = get_id_estudiante(planilla, padron_o_grupo)
 
     entregas = obtener_entregas(repo, tp, id_cursada, id_grupo)
-    # Usar "entregas" para implementar el backoff.
+    _validar_backoff_entregas(entregas, datetime.today())
+
+
+class BackoffException(Exception):
+    """
+    Excepcion que se lanza cuando no se cumplen los tiempos de espera del corrector,
+    luego de sucesivos intentos
+    """
+    pass
