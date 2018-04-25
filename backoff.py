@@ -1,9 +1,8 @@
 import os.path
 from datetime import datetime, timedelta
 
+SIN_PENALIDAD = 2
 ULTIMAS_ENTREGAS = 10
-# 3 minutos
-TIEMPO_BASE = 180
 # Por si acaso que algun error nuestro cause errores, permitimos desactivar el backoff,
 # aunque sea momentaneamente
 BACKOFF_ACTIVADO = True
@@ -57,6 +56,9 @@ def obtener_entregas(repo, tp, id_cursada, id_grupo):
     log = repo.git.log("--format=%at", "--date=iso", rel_dir)
     return [datetime.fromtimestamp(int(date)) for date in log.split("\n")]
 
+def backoff(x):
+    return 0 if x <= SIN_PENALIDAD else x - SIN_PENALIDAD
+
 def tiempo_siguiente_entrega(entregas):
     """
     Calcula el momento a partir del cual el alumno puede volver a hacer la entrega, 
@@ -64,9 +66,8 @@ def tiempo_siguiente_entrega(entregas):
     ultima entrega que hizo.
     Con tiempo base 3 minutos, el maximo backoff sera de unas 51 horas
     """
-    backoff = timedelta(seconds = TIEMPO_BASE * (2 ** (len(entregas) - 1)))
     # Le sumo el delta a la ultima entrega
-    return entregas[-1] + backoff
+    return entregas[-1] + timedelta(hours = backoff(len(entregas)))
 
 def _validar_backoff_entregas(entregas, tiempo_actual):
     """
