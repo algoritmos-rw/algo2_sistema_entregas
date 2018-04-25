@@ -57,6 +57,16 @@ def obtener_entregas(repo, tp, id_cursada, id_grupo):
     return [datetime.fromtimestamp(int(date)) for date in log.split("\n")]
 
 def backoff(x):
+    """
+    Calcula el backoff (en horas) correspondiente a una cantidad de entregas
+    La funcion tiene la forma: 
+                        0                                   si x <= SIN_PENALIDAD
+        backoff(x) =    x - SIN_PENALIDAD                   si SIN_PEALIDAD < x < ULTIMAS_ENTREGAS
+                        ULTIMAS_ENTREGAS - SIN_PENALIDAD    en otro caso
+    
+    Siendo SIN_PENALIDAD = 2 y ULTIMAS_ENTREGAS = 10, 
+    Es la función lineal que empieza en x = 2, y termina en x = 10 con valor 8.
+    """
     return 0 if x <= SIN_PENALIDAD else x - SIN_PENALIDAD
 
 def tiempo_siguiente_entrega(entregas):
@@ -64,7 +74,6 @@ def tiempo_siguiente_entrega(entregas):
     Calcula el momento a partir del cual el alumno puede volver a hacer la entrega, 
     teniendo en cuenta el backoff que tiene que cumplir el alumno respecto de la 
     ultima entrega que hizo.
-    Con tiempo base 3 minutos, el maximo backoff sera de unas 51 horas
     """
     # Le sumo el delta a la ultima entrega
     return entregas[-1] + timedelta(hours = backoff(len(entregas)))
@@ -88,7 +97,7 @@ def _validar_backoff_entregas(entregas, tiempo_actual):
 def validar_backoff(repo, planilla, tp, padron_o_grupo):
     """
     Levanta una excepción de tipo BackoffException cuando un alumno o grupo
-    hacen demasiados intentos en muy poco tiempo para realizar una entrega.
+    hace demasiados intentos en muy poco tiempo para realizar una entrega.
     """
     if not BACKOFF_ACTIVADO:
         return

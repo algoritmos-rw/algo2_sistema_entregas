@@ -19,7 +19,7 @@ class TestValidacionBackoff(unittest.TestCase):
         validar([HOY - timedelta(5)], HOY)
 
     def test_entrega_pasa_backoff(self):
-        # Entrego hace 5 dias
+        # Entrego hace 6, 5, 4 y 3 horas
         validar([HOY - timedelta(hours = 6), HOY - timedelta(hours = 5), HOY - timedelta(hours = 4), HOY - timedelta(hours = 3)], HOY)
 
     def test_entrega_no_pasa_backoff(self):
