@@ -23,7 +23,8 @@ SERVICE_ACCOUNT_CREDENTIALS = {
   "client_x509_cert_url": "..."
 }
 
-RECAPTCHA_SITE_ID = '...'
-RECAPTCHA_SECRET = '...'
+CAPTCHA_URL = "http://0.0.0.0:8181" # Sin la barra al final.
+CAPTCHA_APP_ID = "87c590b0-d62d-4dee-9eaf-36d81ae31939"
+CAPTCHA_SECRET = "4532ee1b-98b2-43cc-adc9-e406a2a9ae5f"
 
 TEST = False

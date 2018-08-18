@@ -20,7 +20,7 @@ from flask import render_template
 from flask import request
 from werkzeug.utils import secure_filename
 
-from config import SENDER_NAME, EMAIL_TO, APP_TITLE, RECAPTCHA_SECRET, RECAPTCHA_SITE_ID, TEST, CLIENT_ID, \
+from config import SENDER_NAME, EMAIL_TO, APP_TITLE, CAPTCHA_URL, CAPTCHA_SECRET, CAPTCHA_APP_ID, TEST, CLIENT_ID, \
     CLIENT_SECRET, OAUTH_REFRESH_TOKEN, GRUPAL, INDIVIDUAL
 from planilla import fetch_planilla
 
@@ -38,6 +38,8 @@ def get():
         'entregas': planilla.entregas,
         'entregas_json': json.dumps(planilla.entregas),
         'correctores_json': json.dumps(planilla.correctores),
+        'captcha_url': CAPTCHA_URL,
+        'captcha_app_uuid': CAPTCHA_APP_ID,
     })
 
 
@@ -50,7 +52,7 @@ def err(error):
 def render(name, params={}):
     return render_template(name, **dict(params, **{
         'title': APP_TITLE,
-        'recaptcha_site_id': RECAPTCHA_SITE_ID,
+        # 'recaptcha_site_id': RECAPTCHA_SITE_ID,
         'test': TEST,
     }))
 
@@ -116,6 +118,8 @@ def sendmail(emails_alumno, email_docente, tp, padrones, files, body):
         server.docmd("AUTH", "XOAUTH2 " + xoauth2_b64)
         server.send_message(correo)
         server.close()
+    else:
+        print("(test) se envía el siguiente mail: " + correo)
 
     return correo
 
@@ -201,7 +205,7 @@ def validate_captcha():
     response = urlfetch.fetch(
         url='https://www.google.com/recaptcha/api/siteverify',
         params=urlencode({
-            "secret": RECAPTCHA_SECRET,
+            # "secret": RECAPTCHA_SECRET,
             "remoteip": request.remote_addr,
             "response": request.form["g-recaptcha-response"],
         }),
