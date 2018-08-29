@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block content %}
 
+<script type="text/javascript" src='{{captcha_url}}/js/crowd-captcha.js?app_uuid={{captcha_app_uuid}}'></script>
+
 {% if test %}
   <div class="alert alert-warning" role="alert">
     <strong>Versión de prueba:</strong> No se enviará ningún e-mail.

@@ -10,7 +10,6 @@ from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from urllib.parse import urlencode
 
 import httplib2
 import oauth2client.client
@@ -118,10 +117,11 @@ def sendmail(emails_alumno, email_docente, tp, padrones, files, body):
         server.docmd("AUTH", "XOAUTH2 " + xoauth2_b64)
         server.send_message(correo)
         server.close()
+        return correo
     else:
-        print("(test) se envía el siguiente mail: " + correo)
-
-    return correo
+        print("(test) se envía el siguiente mail: ")
+        print(correo.as_string())
+        return correo.as_string()
 
 
 def get_oauth_credentials():
@@ -193,7 +193,7 @@ def post():
         return render('result.html', {
             'sent': {
                 'tp': tp,
-                'email': '\n'.join('[[{}]]: {}'.format(k, str(v)) for k, v in email) if TEST else None,
+                'email': email if TEST else None,
             },
         })
     except Exception as e:
@@ -202,18 +202,25 @@ def post():
 
 
 def validate_captcha():
-    response = urlfetch.fetch(
-        url='https://www.google.com/recaptcha/api/siteverify',
-        params=urlencode({
-            # "secret": RECAPTCHA_SECRET,
-            "remoteip": request.remote_addr,
-            "response": request.form["g-recaptcha-response"],
-        }),
-        method="POST",
-    )
+    try:
+        response = urlfetch.fetch(
+            url=CAPTCHA_URL + "/api/v1/validate",
+            data=json.dumps({
+                'app_uuid': CAPTCHA_APP_ID,
+                'app_secret': CAPTCHA_SECRET,
+                'secret': request.form["captcha_secret"],
+            }),
+            headers={
+                'Content-Type': 'application/json',
+            },
+            method="POST",
+        )
 
-    if not response.json['success']:
-        raise Exception('Falló la validación del captcha')
+        if not response.json['success']:
+            raise ValueError('Falló la validación del captcha')
+
+    except Exception:
+        raise Exception('Falló la validación del captcha.')
 
 
 def get_docente(correctores, padron_o_grupo, planilla, tp):
