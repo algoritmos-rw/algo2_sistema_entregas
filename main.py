@@ -74,7 +74,7 @@ def sendmail(emails_alumno, nombres_alumnos,email_docente, tp, padrones, files, 
     correo["From"] = SENDER_NAME
     correo["To"] = EMAIL_TO
     correo["Cc"] = ", ".join(emails_alumno + [email_docente])
-    correo["Subject"] = '{} - {} - {}'.format(tp, ' , '.join(padrones), ' , '.join(nombres_alumnos))
+    correo["Subject"] = '{} - {} - {}'.format(tp, ', '.join(padrones), ', '.join(nombres_alumnos))
 
     correo.attach(MIMEText('\n'.join([
             tp,
