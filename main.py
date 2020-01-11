@@ -5,11 +5,13 @@ import logging
 import mimetypes
 import smtplib
 import traceback
+from backoff import validar_backoff
 from collections import namedtuple
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from git import Repo
 from urllib.parse import urlencode
 
 import httplib2
@@ -20,12 +22,14 @@ from flask import render_template
 from flask import request
 from werkzeug.utils import secure_filename
 
-from config import SENDER_NAME, EMAIL_TO, APP_TITLE, RECAPTCHA_SECRET, RECAPTCHA_SITE_ID, TEST, CLIENT_ID, \
-    CLIENT_SECRET, OAUTH_REFRESH_TOKEN, GRUPAL, INDIVIDUAL
+from config import SENDER_NAME, EMAIL_TO, APP_TITLE, RECAPTCHA_SECRET,\
+    RECAPTCHA_SITE_ID, TEST, CLIENT_ID, CLIENT_SECRET, OAUTH_REFRESH_TOKEN,\
+    REPO_ENTREGAS, GRUPAL, INDIVIDUAL
 from planilla import fetch_planilla
 
 app = Flask(__name__)
 File = namedtuple('File', ['content', 'filename'])
+repo_entregas = Repo(REPO_ENTREGAS)
 
 
 EXTENSIONES_ACEPTADAS = {'zip', 'tar', 'gz', 'pdf'}
@@ -163,17 +167,21 @@ def get_nombres_alumnos(planilla, padrones):
 @app.route('/', methods=['POST'])
 def post():
     try:
-        validate_captcha()
+        validar_captcha()
         planilla = fetch_planilla()
+
         tp = request.form['tp']
+        padron_o_grupo = request.form['identificador']
+
+        # Valida que no se use el corrector como un oráculo.
+        validar_backoff(repo_entregas, planilla, tp, padron_o_grupo)
+
         if tp not in planilla.entregas:
             raise Exception('La entrega {} es inválida'.format(tp))
 
         files = get_files()
         if not files:
             raise Exception('No se ha adjuntado ningún archivo con extensión válida.')
-
-        padron_o_grupo = request.form['identificador']
 
         # Valida si la entrega es individual o grupal de acuerdo a lo ingresado.
         validate_grupo(planilla, padron_o_grupo, tp)
@@ -198,7 +206,7 @@ def post():
         raise e
 
 
-def validate_captcha():
+def validar_captcha():
     response = urlfetch.fetch(
         url='https://www.google.com/recaptcha/api/siteverify',
         params=urlencode({
