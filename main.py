@@ -232,7 +232,7 @@ def validate_captcha():
 
 def get_docente(correctores, padron_o_grupo, planilla, tp):
     if planilla.entregas[tp] == PARCIALITO:
-        return ""
+        return ""  # XXX "Funciona" porque parse_datos_docentes() suele encontrar celdas vacías.
     if padron_o_grupo not in correctores:
         raise Exception('No hay un corrector asignado para el padrón o grupo {}'.format(padron_o_grupo))
 
