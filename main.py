@@ -229,7 +229,7 @@ def post():
     validate_grupo(planilla, padron_o_grupo, tp)
 
     docente = get_docente(planilla.correctores, padron_o_grupo, planilla, tp)
-    email_docente = planilla.emails_docentes[docente]
+    email_docente = planilla.emails_docentes[docente] if docente is not None else ""
     padrones = get_padrones(planilla, padron_o_grupo)
     emails_alumno = get_emails_alumno(planilla, padrones)
     nombres_alumnos = get_nombres_alumnos(planilla, padrones)
