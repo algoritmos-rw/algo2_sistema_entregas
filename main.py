@@ -260,7 +260,7 @@ def validate_captcha():
 
 def get_docente(correctores, padron_o_grupo, planilla, tp):
     if cfg.entregas[tp] == Modalidad.PARCIALITO:
-        return ""  # XXX "Funciona" porque parse_datos_docentes() suele encontrar celdas vacías.
+        return None  # XXX "Funciona" porque parse_datos_docentes() suele encontrar celdas vacías.
     if padron_o_grupo not in correctores:
         raise FailedDependency(f"No hay un corrector asignado para el padrón o grupo {padron_o_grupo}")
 
