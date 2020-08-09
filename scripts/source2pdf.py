@@ -2,14 +2,16 @@ import os, sys, shutil, glob, re, subprocess, threading
 
 MERGED_FILE = "merged.out"
 GS_CMD = "gs -dBATCH -dNOPAUSE -q -sDEVICE=pdfwrite".split(" ")
+ENSCRIPT_CMD = lambda lang, pdf_directory: ("find", ".", "-iname", MERGED_FILE, "-exec", "bash", "-c", 'enscript -b "$(dirname "{}")||$%/$=" -E' + lang + ' --color=1 -fCourier8 -X 88591 -o - "{}" | ps2pdf - ' + pdf_directory + '/$(dirname "{}").pdf', ";")
+REMOVE_MERGED_CMD =("find", ".", "-name", MERGED_FILE, "-type", "f", "-delete")
 
 
-def generate(directory, pdf_directory, lang):
-	os.chdir(directory)
+def generate(pdf_directory, lang):
 	generate_merged_files()
 	os.mkdir(pdf_directory)
-	# TODO: Habria que pasar esto a subprocess.call pero con el piping que tiene creo que perderia un tanto de tiempo haciendolo
-	os.popen("""find * -iname """ + MERGED_FILE + """ -exec bash -c 'enscript -b "$(dirname "{}")||$%/$=" -E""" + lang + """ --color=1 -fCourier8 -X 88591 -o - "{}" | ps2pdf - """ + pdf_directory + """/$(dirname "{}").pdf' \;""")
+	subprocess.call(ENSCRIPT_CMD(lang, pdf_directory))
+	subprocess.Popen(REMOVE_MERGED_CMD)
+	subprocess.Popen(("rm", pdf_directory + "/..pdf"))
 
 
 def generate_merged_files(directory = '.'):
@@ -45,8 +47,7 @@ def add_images_to_exam(pdf_directory, dirpath):
 		subprocess.Popen(["rm", pdf_copy])
 
 
-def add_images(directory, pdf_directory):
-	os.chdir(directory)
+def add_images(pdf_directory):
 	threads = []
 	for dirpath, dirnames, filenames in os.walk('.', 1):
 		if dirpath == '.':
@@ -68,7 +69,9 @@ Uso:
 		- generate_pdfs
 		- attach_images
 			""")
-	if sys.argv[3] == "generate":
-		generate(sys.argv[1], sys.argv[2], sys.argv[4])
-	else:
-		add_images(sys.argv[1], sys.argv[2])
+	directory = sys.argv[1]
+	os.chdir(directory)
+	pdf_dir = sys.argv[2]
+	lang = sys.argv[3]
+	generate(pdf_dir, lang)
+	add_images(pdf_dir)
