@@ -64,10 +64,8 @@ if __name__ == "__main__":
 		print("""
 Uso:
 	1. path a la carpeta con parciales
-	2. nombre de carpeta donde poner los pdfs
-	3. comando a ejecutar:
-		- generate_pdfs
-		- attach_images
+	2. nombre de carpeta donde poner los pdfs (relativa a la primera)
+	3. lenguaje del parcialito (c o python, podria ser otro)
 			""")
 	directory = sys.argv[1]
 	os.chdir(directory)
