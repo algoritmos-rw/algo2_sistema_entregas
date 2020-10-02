@@ -144,12 +144,14 @@ class Planilla(PullDB):
         repos_by_id = {}
 
         for row in islice(rows, 1, None):
-            if legajo := safeidx(row, legajo_idx):
-                try:
-                    alu = self.get_alu(str(legajo))
-                except KeyError:
-                    self._logger.warn(f"{legajo} aparece en Repos pero no en Notas")
-                    continue
+            if not (legajo := safeidx(row, legajo_idx)):
+                continue
+
+            try:
+                alu = self.get_alu(str(legajo))
+            except KeyError:
+                self._logger.warn(f"{legajo} aparece en Repos pero no en Notas")
+                continue
 
             repo_indiv = safeidx(row, repo_idx)
             repo_grupal = safeidx(row, repo2_idx)
