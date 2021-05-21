@@ -8,6 +8,7 @@ REMOVE_MERGED_CMD =("find", ".", "-name", MERGED_FILE, "-type", "f", "-delete")
 
 def generate(pdf_directory, lang):
 	generate_merged_files()
+	subprocess.call(["rm", "-rf", pdf_directory])
 	os.mkdir(pdf_directory)
 	subprocess.call(ENSCRIPT_CMD(lang, pdf_directory))
 	subprocess.Popen(REMOVE_MERGED_CMD)
