@@ -59,9 +59,17 @@ from .alu_repos import AluRepo
 load_dotenv()
 
 ROOT_DIR = pathlib.Path(os.environ["CORRECTOR_ROOT"])
-SKEL_DIR = ROOT_DIR / os.environ["CORRECTOR_SKEL"]
-DATA_DIR = ROOT_DIR / os.environ["CORRECTOR_TPS"]
 WORKER_BIN = ROOT_DIR / os.environ["CORRECTOR_WORKER"]
+
+# Con versiones recientes de Git (25.35.2 y versiones estables de
+# Ubuntu) es necesario que el Unix owner del repositorio "tps" sea el
+# mismo que corre la aplicación web; o bien configurar globalmente una
+# excepción en /etc/gitconfig, marcándolo con `safe.directory`. Esto
+# se debe a la vulnerabilidad CVE-2022-24765, descrita por ejemplo en
+# https://github.blog/2022-04-12-git-security-vulnerability-announced.
+# TODO: documentar esto en README.md, en lugar de aquí.
+DATA_DIR = ROOT_DIR / os.environ["CORRECTOR_TPS"]
+SKEL_DIR = ROOT_DIR / os.environ["CORRECTOR_SKEL"]
 GITHUB_URL = "https://github.com/" + os.environ["CORRECTOR_GH_REPO"]
 
 AUSENCIA_REGEX = re.compile(r" \(ausencia\)$")
