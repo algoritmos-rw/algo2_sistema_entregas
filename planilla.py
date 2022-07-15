@@ -36,7 +36,7 @@ def fetch_planilla():
 # cachetools.ttl_cache nos asegura que jamás se use una planilla más
 # antigua de lo establecido. Sin embargo, de por sí, con ttl_cache
 # la planilla solo tiene oportunidad de refrescarse cuando se invoca
-# a la funcion. Por ello, es probable que muchas visitas demoren
+# a la función. Por ello, es probable que muchas visitas demoren
 # por tener que recargar una planilla que se encontraba expirada.
 #
 # Para acercarnos al ideal de servir todas las peticiones desde cache,
