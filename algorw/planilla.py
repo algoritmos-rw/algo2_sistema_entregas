@@ -142,7 +142,7 @@ class Planilla(PullDB):
         Este método parsea la hoja Repos y:
 
           - actualiza todos los campos "repo_indiv" en self._alulist
-          - devuelve un diccionario que mapea legajos y grupos a repositorios.
+          - devuelve un diccionario de identificadores grupales a repositorio.
         """
         headers = rows[0]
         repo_idx = headers.index("Repo")
