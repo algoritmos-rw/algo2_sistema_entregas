@@ -11,7 +11,7 @@ Pequeña aplicación web para que los alumnos hagan las entregas de TPs.
 - Copiar el archivo _.secrets.template_ a _.secrets_ y completarlo:
 
     * `OAUTH_*` son nuestras credenciales de Google para enviar mail.
-    * `RECAPTCHA_*` son credenciales de [reCAPTCHA](https://www.google.com/recaptcha/admin).
+    * `GITHUB_TOKEN` el token de autenticación para Github (cuenta _@wachenbot_)
 
 - Habilitar las entregas apropiadas en _entregas.yml_.
 
