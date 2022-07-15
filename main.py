@@ -12,7 +12,6 @@ from email.utils import formatdate, make_msgid
 from typing import List, Optional
 
 import github
-import requests
 
 from flask import Flask, render_template, request
 from flask_caching import Cache  # type: ignore
@@ -273,26 +272,6 @@ def post():
         warning=warning,
         email="\n".join(f"{k}: {v}" for k, v in email.items()) if cfg.test else None,
     )
-
-
-def validate_captcha():
-    resp = requests.post(
-        "https://www.google.com/recaptcha/api/siteverify",
-        data={
-            "secret": cfg.recaptcha_secret.get_secret_value(),
-            "remoteip": request.remote_addr,
-            "response": request.form["g-recaptcha-response"],
-        },
-    )
-
-    if resp.ok:
-        json = resp.json()
-    else:
-        resp.raise_for_status()  # Lanza excepción descriptiva para 4xx y 5xx.
-
-    if not json["success"]:
-        msg = ", ".join(json.get("error-codes", ["unknown error"]))
-        raise InvalidForm(f"Falló la validación del captcha ({msg})")
 
 
 def zipfile_for_entrega(files: List[File]) -> File:
