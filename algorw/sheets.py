@@ -32,8 +32,6 @@ class PullDB:
         return self.get()
 
     def get(self, *, refresh=False):
-        """
-        """
         if refresh or self.__data is None:
             self.refresh()
         return self.__data
@@ -58,8 +56,6 @@ class PullDB:
                 self.__data = new_data
 
     def parse_sheets(self, sheet_dict):
-        """
-        """
         raise NotImplementedError
 
 
