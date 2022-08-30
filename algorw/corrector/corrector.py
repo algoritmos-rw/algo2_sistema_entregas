@@ -89,14 +89,12 @@ cfg: Settings = load_config()
 
 
 class ErrorInterno(Exception):
-    """Excepción para cualquier error interno en el programa.
-    """
+    """Excepción para cualquier error interno en el programa."""
 
 
 # TODO: eliminar esta clase una vez se valide todo en la página de entregas.
 class ErrorAlumno(Exception):
-    """Excepción para cualquier error en la entrega.
-    """
+    """Excepción para cualquier error en la entrega."""
 
 
 def corregir_entrega(task: CorrectorTask) -> None:
@@ -113,8 +111,7 @@ def corregir_entrega(task: CorrectorTask) -> None:
 
 
 def procesar_entrega(task: CorrectorTask) -> None:
-    """Recibe el mensaje del alumno y lanza el proceso de corrección.
-    """
+    """Recibe el mensaje del alumno y lanza el proceso de corrección."""
     subj = task.orig_headers["Subject"]
     tp_id = task.tp_id
     padron = "_".join(task.legajos)
@@ -267,8 +264,7 @@ def zip_walk(zip_obj, strip_toplevel=True):
 
 
 class Moss:
-    """Guarda código fuente del alumno.
-    """
+    """Guarda código fuente del alumno."""
 
     def __init__(self, dest: pathlib.Path):
         self._dest = dest
@@ -277,8 +273,7 @@ class Moss:
         self._dest.mkdir(parents=True)
 
     def location(self):
-        """Directorio donde se guardaron los archivos.
-        """
+        """Directorio donde se guardaron los archivos."""
         return self._dest
 
     def url(self):
@@ -302,8 +297,7 @@ class Moss:
         return self._git(["add", relpath]) == 0
 
     def flush(self, message: str, date: str) -> None:  # TODO: pass datetime?
-        """Termina de guardar los archivos en el repositorio.
-        """
+        """Termina de guardar los archivos en el repositorio."""
         if self._emoji:
             message = f"{self._emoji} {message}"  # type: ignore
         self._git(["add", "--no-ignore-removal", "."])
@@ -328,8 +322,7 @@ class Moss:
 
 
 def zip_datetime(info):
-    """Gets a datetime.datetime from a ZipInfo object.
-    """
+    """Gets a datetime.datetime from a ZipInfo object."""
     return datetime.datetime(*info.date_time)
 
 

@@ -17,8 +17,7 @@ class Config:
 
 
 class PullDB:
-    """Clase para descargar hojas de Google Sheets.
-    """
+    """Clase para descargar hojas de Google Sheets."""
 
     def __init__(self, cfg: Config, /, *, initial_fetch=False):
         self._cfg = cfg

@@ -94,8 +94,7 @@ class Planilla(PullDB):
         return self._alulist_by_id[identificador]
 
     def repo_grupal(self, id_grupo: str) -> Optional[Repo]:
-        """Devuelve el Repositorio de un grupo, si lo hay.
-        """
+        """Devuelve el Repositorio de un grupo, si lo hay."""
         return self._repos_by_group.get(id_grupo)
 
     def _parse_notas(self, rows) -> Dict[str, List[Alumne]]:
