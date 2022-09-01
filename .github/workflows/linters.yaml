@@ -20,6 +20,8 @@ jobs:
             target: flake8
           - name: mypy
             target: typecheck
+          - name: black
+            target: format_check
     steps:
       - uses: actions/checkout@v2
 

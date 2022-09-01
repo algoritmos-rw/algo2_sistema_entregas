@@ -94,7 +94,10 @@ def get_files():
 
 
 def make_email(
-    tp: str, alulist: List[Alumne], docente: Optional[Docente], body: str,
+    tp: str,
+    alulist: List[Alumne],
+    docente: Optional[Docente],
+    body: str,
 ) -> MIMEMultipart:
     """Prepara el correo a enviar, con cabeceras y cuerpo, sin adjunto."""
     body_n = f"\n{body}\n" if body else ""
@@ -117,7 +120,8 @@ def make_email(
     direcciones = "\n".join(emails)
     correo.attach(
         MIMEText(
-            f"{tp}\n{direcciones}\n{body_n}\n-- \n{cfg.title} – {request.url}", "plain",
+            f"{tp}\n{direcciones}\n{body_n}\n-- \n{cfg.title} – {request.url}",
+            "plain",
         )
     )
     return correo

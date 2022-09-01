@@ -10,7 +10,10 @@ flake8:
 typecheck:
 	mypy $(LINT_TARGETS)
 
-.PHONY: all lint flake8 typecheck
+format_check:
+	black --check $(LINT_TARGETS)
+
+.PHONY: all lint flake8 typecheck format_check
 
 # Para producción.
 deploy: venv
