@@ -305,7 +305,7 @@ class Moss:
         """Termina de guardar los archivos en el repositorio.
         """
         if self._emoji:
-            message = f"{self._emoji} {message}"
+            message = f"{self._emoji} {message}"  # type: ignore
         self._git(["add", "--no-ignore-removal", "."])
         self._git(["commit", "-m", message, "--date", date])
         self._git(["push", "--force-with-lease", "origin", ":"])
