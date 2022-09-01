@@ -18,3 +18,7 @@ flake8-pep3101
 flake8-polyfill
 flake8-quotes
 flake8-string-format
+
+types-Flask==1.1.2
+types-redis==3.5.3
+types-PyYAML==5.4.0
