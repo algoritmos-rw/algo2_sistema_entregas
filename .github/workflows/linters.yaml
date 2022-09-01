@@ -1,0 +1,43 @@
+name: linters
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'main'
+      - 'force_ci/linters/**'  # For development, and debugging of the workflow.
+
+
+jobs:
+  linters:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: flake8
+            target: flake8
+          - name: mypy
+            target: typecheck
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Python and pip caching
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+          cache: pip
+          cache-dependency-path: |
+            requirements.txt
+            requirements.dev.txt
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt -r requirements.dev.txt
+
+      - name: Run make ${{ matrix.target }}
+        run: |
+          echo "::add-matcher::${GITHUB_WORKSPACE}/.github/matchers/${{ matrix.name }}.json"
+          make ${{ matrix.target }}
+          echo "::remove-matcher owner=${{ matrix.name }}::"
