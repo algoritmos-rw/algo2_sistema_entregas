@@ -10,7 +10,7 @@ from google.oauth2.credentials import Credentials  # type: ignore
 from config import Settings
 
 
-def sendmail(message: Message, creds: Credentials):
+def sendmail(message: Message, creds: Credentials) -> None:
     """Envía un mensaje usando el SMTP de Gmail.
     """
     _, sender = parseaddr(message["From"])
@@ -25,7 +25,7 @@ def sendmail(message: Message, creds: Credentials):
     server.close()
 
 
-def get_oauth_credentials(cfg: Settings):
+def get_oauth_credentials(cfg: Settings) -> Credentials:
     """Devuelve nuestras credenciales OAuth.
     """
     creds = Credentials(
