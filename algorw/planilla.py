@@ -27,6 +27,10 @@ class Planilla(PullDB):
     Las hojas que se descargan y procesan son las del enum Hojas, arriba.
     """
 
+    _correctores: Dict[str, List[str]]
+    _alulist_by_id: Dict[str, List[Alumne]]
+    _repos_by_group: Dict[str, Repo]
+
     def parse_sheets(self, sheet_dict):
         self._logger = logging.getLogger("entregas")
 
