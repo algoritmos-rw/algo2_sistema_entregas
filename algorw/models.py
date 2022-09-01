@@ -81,8 +81,7 @@ def parse_rows(rows: List[List[str]], model: Type[Model]) -> List[Model]:
         except ValidationError as ex:
             errors = ex.errors()
             failed = ", ".join(e["loc"][0] for e in errors)
-            logger.warn(ex)
-            logger.warn(f"ValidationError: {failed} in {attrs}")
+            logger.warning("ValidationError: %s in %s", failed, attrs)
 
     return objects
 
