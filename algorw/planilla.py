@@ -101,7 +101,7 @@ class Planilla(PullDB):
         """Devuelve el Repositorio de un grupo, si lo hay."""
         return self._repos_by_group.get(id_grupo)
 
-    def _parse_notas(self, rows) -> Dict[str, List[Alumne]]:
+    def _parse_notas(self, rows: List[List[str]]) -> Dict[str, List[Alumne]]:
         """Construye el mapeo de identificadores a alumnes.
 
         Este método combina la planilla Notas con la lista de Alumnes para construir
@@ -141,7 +141,7 @@ class Planilla(PullDB):
 
         return alulist_by_id
 
-    def _parse_repos(self, rows) -> Dict[str, Repo]:
+    def _parse_repos(self, rows: List[List[str]]) -> Dict[str, Repo]:
         """Completa la información sobre repostorios individuales y grupales.
 
         Este método parsea la hoja Repos y:
