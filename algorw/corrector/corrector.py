@@ -43,7 +43,7 @@ import tarfile
 import textwrap
 import zipfile
 
-from typing import Dict
+from typing import Dict, Optional
 
 from dotenv import load_dotenv
 from github import GithubException
@@ -268,7 +268,7 @@ class Moss:
 
     def __init__(self, dest: pathlib.Path):
         self._dest = dest
-        self._emoji = None
+        self._emoji: Optional[str] = None
         shutil.rmtree(self._dest, ignore_errors=True)
         self._dest.mkdir(parents=True)
 
@@ -299,7 +299,7 @@ class Moss:
     def flush(self, message: str, date: str) -> None:  # TODO: pass datetime?
         """Termina de guardar los archivos en el repositorio."""
         if self._emoji:
-            message = f"{self._emoji} {message}"  # type: ignore
+            message = f"{self._emoji} {message}"
         self._git(["add", "--no-ignore-removal", "."])
         self._git(["commit", "-m", message, "--date", date])
         self._git(["push", "--force-with-lease", "origin", ":"])
