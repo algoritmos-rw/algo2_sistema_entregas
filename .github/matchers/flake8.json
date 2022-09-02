@@ -1,0 +1,32 @@
+{
+  "problemMatcher": [
+    {
+      "severity": "error",
+      "pattern": [
+        {
+          "regexp": "^(\\033\\[0m)?([^:]+):(\\d+):(\\d+): ([EF]\\d{3}) (.*)$",
+          "file": 2,
+          "line": 3,
+          "column": 4,
+          "code": 5,
+          "message": 6
+        }
+      ],
+      "owner": "flake8"
+    },
+    {
+      "severity": "warning",
+      "pattern": [
+        {
+          "regexp": "^(\\033\\[0m)?([^:]+):(\\d+):(\\d+): ([A-DG-Z]\\d{3}) (.*)$",
+          "file": 2,
+          "line": 3,
+          "column": 4,
+          "code": 5,
+          "message": 6
+        }
+      ],
+      "owner": "flake8-warning"
+    }
+  ]
+}

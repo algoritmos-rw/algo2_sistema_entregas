@@ -1,4 +1,16 @@
-all: sync
+LINT_TARGETS := $(wildcard *.py) algorw/
+
+all: lint
+
+lint: flake8 typecheck
+
+flake8:
+	flake8 $(LINT_TARGETS)
+
+typecheck:
+	mypy $(LINT_TARGETS)
+
+.PHONY: all lint flake8 typecheck
 
 # Para producción.
 deploy: venv
@@ -20,4 +32,4 @@ venv:
 	    venv/bin/python -m pip install pip-tools; \
 	}
 
-.PHONY: all sync
+.PHONY: deploy sync

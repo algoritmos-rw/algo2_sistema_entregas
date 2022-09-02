@@ -37,7 +37,7 @@ class AluRepo:
     def url(self):
         return f"https://github.com/{self.repo_full}"
 
-    def ensure_exists(self, *, skel_repo: str = None):
+    def ensure_exists(self, *, skel_repo: str = None) -> None:
         """Crea el repositorio en Github, si no existe aún.
 
         Si el repositorio ya existe, no se hace nada. Si no existe, se lo
@@ -98,7 +98,7 @@ class AluRepo:
         checkrun: Optional[Dict] = None,
         *,
         target_subdir: str = None,
-    ):
+    ) -> None:
         """Importa una entrega a los repositorios de alumnes.
 
         Args:

@@ -99,7 +99,7 @@ class ErrorAlumno(Exception):
     """
 
 
-def corregir_entrega(task: CorrectorTask):
+def corregir_entrega(task: CorrectorTask) -> None:
     """Función de corrección principal.
 
     El flujo de la corrección se corta lanzando excepciones ErrorAlumno.
@@ -112,7 +112,7 @@ def corregir_entrega(task: CorrectorTask):
         print(ex, file=sys.stderr)
 
 
-def procesar_entrega(task: CorrectorTask):
+def procesar_entrega(task: CorrectorTask) -> None:
     """Recibe el mensaje del alumno y lanza el proceso de corrección.
     """
     subj = task.orig_headers["Subject"]
@@ -301,11 +301,11 @@ class Moss:
         path.write_bytes(contents)
         return self._git(["add", relpath]) == 0
 
-    def flush(self, message: str, date: str):  # TODO: pass datetime?
+    def flush(self, message: str, date: str) -> None:  # TODO: pass datetime?
         """Termina de guardar los archivos en el repositorio.
         """
         if self._emoji:
-            message = f"{self._emoji} {message}"
+            message = f"{self._emoji} {message}"  # type: ignore
         self._git(["add", "--no-ignore-removal", "."])
         self._git(["commit", "-m", message, "--date", date])
         self._git(["push", "--force-with-lease", "origin", ":"])
@@ -333,7 +333,7 @@ def zip_datetime(info):
     return datetime.datetime(*info.date_time)
 
 
-def send_reply(orig_headers: Dict[str, str], reply_text: str):
+def send_reply(orig_headers: Dict[str, str], reply_text: str) -> None:
     """Envía una cadena de texto como respuesta a un correo recibido.
 
     Args:
