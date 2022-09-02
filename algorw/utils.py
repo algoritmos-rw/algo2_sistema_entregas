@@ -11,8 +11,7 @@ from config import Settings
 
 
 def sendmail(message: Message, creds: Credentials) -> None:
-    """Envía un mensaje usando el SMTP de Gmail.
-    """
+    """Envía un mensaje usando el SMTP de Gmail."""
     _, sender = parseaddr(message["From"])
     xoauth2_tok = f"user={sender}\1" f"auth=Bearer {creds.token}\1\1"
     xoauth2_b64 = b64encode(xoauth2_tok.encode("ascii")).decode("ascii")
@@ -26,8 +25,7 @@ def sendmail(message: Message, creds: Credentials) -> None:
 
 
 def get_oauth_credentials(cfg: Settings) -> Credentials:
-    """Devuelve nuestras credenciales OAuth.
-    """
+    """Devuelve nuestras credenciales OAuth."""
     creds = Credentials(
         token=None,
         client_id=cfg.oauth_client_id,

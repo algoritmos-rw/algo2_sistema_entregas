@@ -1,5 +1,4 @@
-"""Clase AluRepo para manejar los repositorios individuales y grupales.
-"""
+"""Clase AluRepo para manejar los repositorios individuales y grupales."""
 
 import base64
 import io
@@ -25,8 +24,7 @@ EMOJI_REGEX = re.compile("^:(heavy_check_mark|x): ")
 
 
 class AluRepo:
-    """Clase para sincronizar un repo de alumne.
-    """
+    """Clase para sincronizar un repo de alumne."""
 
     def __init__(self, repo_full: str, *, auth_token: str):
         self.gh_repo: Optional[GithubRepo] = None  # TODO: Make this a @property.

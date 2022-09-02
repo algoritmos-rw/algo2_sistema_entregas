@@ -45,8 +45,7 @@ EXTENSIONES_ACEPTADAS = {"zip"}  # TODO: volver a aceptar archivos sueltos.
 
 
 class InvalidForm(Exception):
-    """Excepción para cualquier error en el form.
-    """
+    """Excepción para cualquier error en el form."""
 
 
 @app.context_processor
@@ -76,8 +75,7 @@ def err(error):
 
 @app.errorhandler(InvalidForm)
 def warn_and_render(ex):
-    """Error menos verboso que err(), apropiado para excepciones de usuario.
-    """
+    """Error menos verboso que err(), apropiado para excepciones de usuario."""
     logging.warn(f"InvalidForm: {ex}")
     return render_template("result.html", error=ex), 422  # Unprocessable Entity
 
@@ -96,10 +94,12 @@ def get_files():
 
 
 def make_email(
-    tp: str, alulist: List[Alumne], docente: Optional[Docente], body: str,
+    tp: str,
+    alulist: List[Alumne],
+    docente: Optional[Docente],
+    body: str,
 ) -> MIMEMultipart:
-    """Prepara el correo a enviar, con cabeceras y cuerpo, sin adjunto.
-    """
+    """Prepara el correo a enviar, con cabeceras y cuerpo, sin adjunto."""
     body_n = f"\n{body}\n" if body else ""
     emails = sorted(x.correo for x in alulist)
     nombres = sorted(x.nombre.split(",")[0].title() for x in alulist)
@@ -120,15 +120,15 @@ def make_email(
     direcciones = "\n".join(emails)
     correo.attach(
         MIMEText(
-            f"{tp}\n{direcciones}\n{body_n}\n-- \n{cfg.title} – {request.url}", "plain",
+            f"{tp}\n{direcciones}\n{body_n}\n-- \n{cfg.title} – {request.url}",
+            "plain",
         )
     )
     return correo
 
 
 def oauth_credentials():
-    """Caché de las credenciales OAuth.
-    """
+    """Caché de las credenciales OAuth."""
     key = "oauth2_credentials"
     creds = cache.get(key)
 

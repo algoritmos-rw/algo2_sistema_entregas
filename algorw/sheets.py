@@ -17,8 +17,7 @@ class Config:
 
 
 class PullDB:
-    """Clase para descargar hojas de Google Sheets.
-    """
+    """Clase para descargar hojas de Google Sheets."""
 
     def __init__(self, cfg: Config, /, *, initial_fetch=False):
         self._cfg = cfg
@@ -33,8 +32,6 @@ class PullDB:
         return self.get()
 
     def get(self, *, refresh=False):
-        """
-        """
         if refresh or self.__data is None:
             self.refresh()
         return self.__data
@@ -59,8 +56,6 @@ class PullDB:
                 self.__data = new_data
 
     def parse_sheets(self, sheet_dict):
-        """
-        """
         raise NotImplementedError
 
 

@@ -7,8 +7,7 @@ from .models import Repo
 
 
 class RepoSync(BaseModel):
-    """Clase que describe la sincronización de una entrega.
-    """
+    """Clase que describe la sincronización de una entrega."""
 
     # El repositorio donde se sincroniza la entrega.
     alu_repo: Repo

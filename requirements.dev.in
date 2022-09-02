@@ -1,5 +1,10 @@
 -c requirements.txt
+
+mypy
+black
+
 flake8
+flake8-black
 flake8-bugbear
 flake8-coding
 flake8-comprehensions
@@ -13,4 +18,3 @@ flake8-pep3101
 flake8-polyfill
 flake8-quotes
 flake8-string-format
-mypy
