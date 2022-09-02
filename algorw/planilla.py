@@ -120,7 +120,9 @@ class Planilla(PullDB):
             try:
                 alu = aludict[str(legajo)]
             except KeyError:
-                self._logger.warn(f"{legajo} aparece en Notas pero no en DatosAlumnos")
+                self._logger.warning(
+                    "%s aparece en Notas pero no en DatosAlumnos", legajo
+                )
             else:
                 legajos.add(alu.legajo)
                 alulist_by_id[alu.legajo] = [alu]
@@ -157,7 +159,7 @@ class Planilla(PullDB):
             try:
                 alu = self.get_alu(str(legajo))
             except KeyError:
-                self._logger.warn(f"{legajo} aparece en Repos pero no en Notas")
+                self._logger.warning("%s aparece en Repos pero no en Notas", legajo)
                 continue
 
             repo_indiv = safeidx(row, repo_idx)

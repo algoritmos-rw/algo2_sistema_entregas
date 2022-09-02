@@ -76,7 +76,7 @@ def err(error):
 @app.errorhandler(InvalidForm)
 def warn_and_render(ex):
     """Error menos verboso que err(), apropiado para excepciones de usuario."""
-    logging.warn(f"InvalidForm: {ex}")
+    logging.warning("InvalidForm: %s", ex)
     return render_template("result.html", error=ex), 422  # Unprocessable Entity
 
 
@@ -196,7 +196,7 @@ def post():
             alulist = planilla.get_alulist(alumne.grupo)
             alu_repo = planilla.repo_grupal(alumne.grupo)
         except KeyError:
-            logging.warn(f"KeyError in get_alulist({alumne.group})")
+            logging.warning("KeyError in get_alulist(%r)", alumne.group)
     else:
         alu_repo = alumne.repo_indiv
 
