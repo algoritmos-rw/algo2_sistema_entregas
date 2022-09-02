@@ -43,7 +43,8 @@ import tarfile
 import textwrap
 import zipfile
 
-from typing import Dict, Optional
+from pathlib import PurePath
+from typing import Dict, Optional, Set
 
 from dotenv import load_dotenv
 from github import GithubException
@@ -148,7 +149,7 @@ def procesar_entrega(task: CorrectorTask) -> None:
 
     # Añadir al archivo TAR la base del TP (skel_dir).
     for entry in os.scandir(skel_dir):
-        path = pathlib.PurePath(entry.path)
+        path = PurePath(entry.path)
         rel_path = path.relative_to(skel_dir)
         tar.add(path, "skel" / rel_path)
 
@@ -231,10 +232,10 @@ def zip_walk(zip_obj, strip_toplevel=True):
     Yields:
         - tuplas (nombre_archivo, zipinfo_object).
     """
-    zip_files = [pathlib.PurePath(f) for f in zip_obj.namelist()]
+    zip_files = [PurePath(f) for f in zip_obj.namelist()]
     forbidden_files = [f for f in zip_files if is_forbidden(f)]
-    all_parents = set()
-    common_parent = pathlib.PurePath(".")
+    all_parents: Set[PurePath] = set()
+    common_parent = "."
 
     if not zip_files:
         raise ErrorAlumno("archivo ZIP vacío")
