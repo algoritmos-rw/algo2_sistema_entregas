@@ -1,7 +1,7 @@
 from pathlib import PurePath
 from typing import Dict, List, Optional
 
-from pydantic import BaseModel, SecretStr
+from pydantic import BaseModel
 
 from .models import Repo
 
@@ -16,7 +16,7 @@ class RepoSync(BaseModel):
     github_id: str
 
     # El token para autenticar la instalación de Github.
-    auth_token: SecretStr
+    auth_token: str
 
     class Config:
         arbitrary_types_allowed = True

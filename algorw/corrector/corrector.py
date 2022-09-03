@@ -179,7 +179,7 @@ def procesar_entrega(task: CorrectorTask) -> None:
     if task.repo_sync is not None:
         checkrun = None
         dest_repo = task.repo_sync.alu_repo
-        auth_token = task.repo_sync.auth_token.get_secret_value()
+        auth_token = task.repo_sync.auth_token
 
         if m := TODO_OK_OR_ERROR.search(output):
             result = m.group(1)
