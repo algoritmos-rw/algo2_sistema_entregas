@@ -232,7 +232,7 @@ def post():
         relpath_base = pathlib.PurePath("parcialitos") / cfg.cuatri / tp_id
 
     if alu_repo is not None:
-        auth_token = cfg.github_token
+        auth_token = cfg.github_token.get_secret_value()
         installation = gh.get_installation(alu_repo.owner, alu_repo.name)
         try:
             auth = gh.get_access_token(installation.id)

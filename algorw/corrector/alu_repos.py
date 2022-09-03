@@ -35,7 +35,7 @@ class AluRepo:
     def url(self):
         return f"https://github.com/{self.repo_full}"
 
-    def ensure_exists(self, *, skel_repo: str = None) -> None:
+    def ensure_exists(self, *, skel_repo: Optional[str] = None) -> None:
         """Crea el repositorio en Github, si no existe aún.
 
         Si el repositorio ya existe, no se hace nada. Si no existe, se lo
@@ -95,7 +95,7 @@ class AluRepo:
         ghuser: str,
         checkrun: Optional[Dict] = None,
         *,
-        target_subdir: str = None,
+        target_subdir: Optional[str] = None,
     ) -> None:
         """Importa una entrega a los repositorios de alumnes.
 
@@ -214,8 +214,8 @@ def tree_to_github(
 def deleted_files(
     new_files: Set[str],
     cur_tree: GithubTree,
-    match_re: re.Pattern = None,
-    preserve_from: GithubTree = None,
+    match_re: Optional[re.Pattern] = None,
+    preserve_from: Optional[GithubTree] = None,
 ) -> List[InputGitTreeElement]:
     """Calcula los archivos a borrar en el repositorio junto con la entrega.
 

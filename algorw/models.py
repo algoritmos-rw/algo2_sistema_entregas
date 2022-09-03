@@ -1,6 +1,6 @@
 from itertools import islice
 from logging import getLogger
-from typing import ClassVar, List, Optional, Sequence, Type
+from typing import ClassVar, List, Optional, Sequence, Type, TypeVar
 
 from pydantic import BaseModel, EmailStr, ValidationError
 
@@ -14,6 +14,9 @@ __all__ = [
     "parse_rows",
     "safeidx",
 ]
+
+
+ModelT = TypeVar("ModelT", bound="Model")
 
 
 class Model(BaseModel):
@@ -53,7 +56,7 @@ class Alumne(Model):
         arbitrary_types_allowed = True
 
 
-def parse_rows(rows: List[List[str]], model: Type[Model]) -> List[Model]:
+def parse_rows(rows: List[List[str]], model: Type[ModelT]) -> List[ModelT]:
     """Construye objetos de una clase modelo a partir de filas de planilla.
 
     Argumentos:

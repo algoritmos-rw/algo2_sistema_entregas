@@ -43,7 +43,8 @@ import tarfile
 import textwrap
 import zipfile
 
-from typing import Dict
+from pathlib import PurePath
+from typing import Dict, Optional, Set
 
 from dotenv import load_dotenv
 from github import GithubException
@@ -148,7 +149,7 @@ def procesar_entrega(task: CorrectorTask) -> None:
 
     # Añadir al archivo TAR la base del TP (skel_dir).
     for entry in os.scandir(skel_dir):
-        path = pathlib.PurePath(entry.path)
+        path = PurePath(entry.path)
         rel_path = path.relative_to(skel_dir)
         tar.add(path, "skel" / rel_path)
 
@@ -179,7 +180,7 @@ def procesar_entrega(task: CorrectorTask) -> None:
     if task.repo_sync is not None:
         checkrun = None
         dest_repo = task.repo_sync.alu_repo
-        auth_token = task.repo_sync.auth_token.get_secret_value()
+        auth_token = task.repo_sync.auth_token
 
         if m := TODO_OK_OR_ERROR.search(output):
             result = m.group(1)
@@ -231,10 +232,10 @@ def zip_walk(zip_obj, strip_toplevel=True):
     Yields:
         - tuplas (nombre_archivo, zipinfo_object).
     """
-    zip_files = [pathlib.PurePath(f) for f in zip_obj.namelist()]
+    zip_files = [PurePath(f) for f in zip_obj.namelist()]
     forbidden_files = [f for f in zip_files if is_forbidden(f)]
-    all_parents = set()
-    common_parent = pathlib.PurePath(".")
+    all_parents: Set[PurePath] = set()
+    common_parent = "."
 
     if not zip_files:
         raise ErrorAlumno("archivo ZIP vacío")
@@ -268,7 +269,7 @@ class Moss:
 
     def __init__(self, dest: pathlib.Path):
         self._dest = dest
-        self._emoji = None
+        self._emoji: Optional[str] = None
         shutil.rmtree(self._dest, ignore_errors=True)
         self._dest.mkdir(parents=True)
 
@@ -299,7 +300,7 @@ class Moss:
     def flush(self, message: str, date: str) -> None:  # TODO: pass datetime?
         """Termina de guardar los archivos en el repositorio."""
         if self._emoji:
-            message = f"{self._emoji} {message}"  # type: ignore
+            message = f"{self._emoji} {message}"
         self._git(["add", "--no-ignore-removal", "."])
         self._git(["commit", "-m", message, "--date", date])
         self._git(["push", "--force-with-lease", "origin", ":"])

@@ -19,7 +19,7 @@ class Config:
 class PullDB:
     """Clase para descargar hojas de Google Sheets."""
 
-    def __init__(self, cfg: Config, /, *, initial_fetch=False):
+    def __init__(self, cfg: Config, /, *, initial_fetch: bool = False):
         self._cfg = cfg
         self._lock = threading.Lock()
         self.__data = None
