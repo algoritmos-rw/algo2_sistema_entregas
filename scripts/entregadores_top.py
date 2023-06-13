@@ -12,7 +12,7 @@ def mes_inicio_fin(semestre):
 	return inicio, fin
 
 
-def main(anio, semestre, top):
+def main(anio, semestre, top, tipo_top):
 	entregadores = {}
 	ini, fin = mes_inicio_fin(semestre)
 	fecha_inicio = f'''{anio}-{ini}-01'''
@@ -26,8 +26,15 @@ def main(anio, semestre, top):
 			entregadores[e2] = entregadores.get(e2, 0) + 1
 		else:
 			entregadores[entregador] = entregadores.get(entregador, 0) + 1
+	entregadores = {e: entregadores[e] for e in entregadores if entregadores[e] >= 10}
+	if tipo_top == "+":
+		topk = heapq.nlargest
+	elif tipo_top == "-":
+		topk = heapq.nsmallest
+	else:
+		raise ValueError("Tipo Top invalido")	
 
-	for top in heapq.nlargest(top, entregadores, key=lambda e: entregadores[e]):
+	for top in topk(top, entregadores, key=lambda e: entregadores[e]):
 		print(top, entregadores[top])
 
 
@@ -35,4 +42,5 @@ if __name__ == "__main__":
 	cuatrimestre = sys.argv[1]
 	top = int(sys.argv[2]) if len(sys.argv) > 2 else 5
 	anio, semestre = cuatrimestre.split("_")
-	main(anio, int(semestre), top)
+	tipo_top = sys.argv[3] if len(sys.argv) > 3 else "+"
+	main(anio, int(semestre), top, tipo_top)
