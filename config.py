@@ -31,9 +31,6 @@ class Settings(BaseSettings):
     oauth_refresh_token: SecretStr
     service_account_jsonfile: str
 
-    recaptcha_site_id: str
-    recaptcha_secret: SecretStr
-
     github_app_id: int
     github_app_keyfile: str
 
