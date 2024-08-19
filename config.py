@@ -3,6 +3,7 @@ from enum import Enum
 from functools import lru_cache
 from typing import Dict
 
+import os
 import yaml
 
 from pydantic import BaseSettings, NameEmail, SecretStr
@@ -48,5 +49,5 @@ def load_config():
     # FIXME: estaría mejor si las variables de entorno pudieran tomar
     # precedencia sobre la configuración en YAML (ver el orden de prioridad en
     # https://pydantic-docs.helpmanual.io/usage/settings/#field-value-priority).
-    with open("entregas.yml") as yml:
+    with open(os.environ.get("ENTREGAS_CONFIG", "entregas.yml")) as yml:
         return Settings(**yaml.safe_load(yml), _env_file=".secrets")
