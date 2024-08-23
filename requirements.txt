@@ -84,9 +84,9 @@ pycparser==2.20
     # via cffi
 pydantic==1.6.1
     # via -r requirements.in
-pygithub==1.55
+pygithub==1.58.2
     # via -r requirements.in
-pyjwt==2.0.1
+pyjwt==2.9.0
     # via pygithub
 python-dotenv==0.13.0
     # via -r requirements.in

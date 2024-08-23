@@ -233,8 +233,8 @@ def post():
 
     if alu_repo is not None:
         auth_token = cfg.github_token.get_secret_value()
-        installation = gh.get_installation(alu_repo.owner, alu_repo.name)
         try:
+            installation = gh.get_installation(alu_repo.owner, alu_repo.name)
             auth = gh.get_access_token(installation.id)
             auth_token = auth.token
         except github.UnknownObjectException:
