@@ -234,16 +234,12 @@ def post():
         gh = github.GithubIntegration(
             cfg.github_app_id, open(cfg.github_app_keyfile).read()
         )
-        auth_token = cfg.github_token.get_secret_value()
         try:
             installation = gh.get_installation(alu_repo.owner, alu_repo.name)
-            auth = gh.get_access_token(installation.id)
-            auth_token = auth.token
         except github.UnknownObjectException:
-            # Probablemente el repositorio no existe todavía. Usamos el antiguo token
-            # hasta que resolvamos
-            # https://github.com/PyGithub/PyGithub/issues/1730#issuecomment-739111283.
-            pass
+            installation = gh.get_org_installation(alu_repo.owner)
+        auth = gh.get_access_token(installation.id)
+        auth_token = auth.token
         repo_sync = RepoSync(
             alu_repo=alu_repo,
             auth_token=auth_token,
