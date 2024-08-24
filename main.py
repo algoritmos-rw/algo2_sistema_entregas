@@ -32,9 +32,6 @@ app.logger.setLevel(logging.INFO)
 app.config["MAX_CONTENT_LENGTH"] = 4 * 1024 * 1024  # 4 MiB
 
 cfg: Settings = load_config()
-gh: github.GithubIntegration = github.GithubIntegration(
-    cfg.github_app_id, open(cfg.github_app_keyfile).read()
-)
 cache: Cache = Cache(config={"CACHE_TYPE": "simple"})
 
 cache.init_app(app)
@@ -232,6 +229,11 @@ def post():
         relpath_base = pathlib.PurePath("parcialitos") / cfg.cuatri / tp_id
 
     if alu_repo is not None:
+        # Crear este objeto cada vez para evitar
+        # https://github.com/PyGithub/PyGithub/issues/2431.
+        gh = github.GithubIntegration(
+            cfg.github_app_id, open(cfg.github_app_keyfile).read()
+        )
         auth_token = cfg.github_token.get_secret_value()
         try:
             installation = gh.get_installation(alu_repo.owner, alu_repo.name)
