@@ -235,7 +235,7 @@ def post():
             cfg.github_app_id, open(cfg.github_app_keyfile).read()
         )
         try:
-            installation = gh.get_installation(alu_repo.owner, alu_repo.name)
+            installation = gh.get_repo_installation(alu_repo.owner, alu_repo.name)
         except github.UnknownObjectException:
             installation = gh.get_org_installation(alu_repo.owner)
         auth = gh.get_access_token(installation.id)
