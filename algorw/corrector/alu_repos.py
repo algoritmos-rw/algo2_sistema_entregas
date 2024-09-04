@@ -150,6 +150,8 @@ class AluRepo:
         for commit in reversed(pending_commits):
             entrega_tree = commit.tree.join(entrega_relpath)
             tree_contents = tree_to_github(entrega_tree, target_subdir, repo)
+            if not tree_contents:
+                continue
             entrega_files = set(tree_contents.keys())
             tree_elements = list(tree_contents.values())
             tree_elements.extend(
