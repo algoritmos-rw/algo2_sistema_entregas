@@ -271,8 +271,8 @@ class Moss:
         self._dest = dest
         self._emoji: Optional[str] = None
         shutil.rmtree(self._dest, ignore_errors=True)
-        self._git(["rm", "--cached", self._dest])
         self._dest.mkdir(parents=True)
+        self._git(["rm", "--cached", self._dest])
 
     def location(self):
         """Directorio donde se guardaron los archivos."""
