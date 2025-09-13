@@ -221,7 +221,7 @@ def procesar_entrega(task: CorrectorTask) -> None:
 
 def is_forbidden(path):
     return (
-        path.is_absolute() or ".." in path.parts or path.suffix in FORBIDDEN_EXTENSIONS or path.parts[0] in FORBIDDEN_DIRECTORIES
+        path.is_absolute() or ".." in path.parts or path.suffix in FORBIDDEN_EXTENSIONS or any(map(lambda p: p in FORBIDDEN_DIRECTORIES, path.parts))
     )
 
 def is_skippable(path):
