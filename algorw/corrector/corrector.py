@@ -86,6 +86,10 @@ FORBIDDEN_EXTENSIONS = {
     ".pyc",
 }
 
+FORBIDDEN_DIRECTORIES = {
+    ".git",
+}
+
 cfg: Settings = load_config()
 
 
@@ -217,8 +221,14 @@ def procesar_entrega(task: CorrectorTask) -> None:
 
 def is_forbidden(path):
     return (
-        path.is_absolute() or ".." in path.parts or path.suffix in FORBIDDEN_EXTENSIONS
+        path.is_absolute() or ".." in path.parts or path.suffix in FORBIDDEN_EXTENSIONS or path.parts[0] in FORBIDDEN_DIRECTORIES
     )
+
+def is_skippable(path):
+    for ctx in [".git", ".DS_STORE"]:
+        if ctx in path.parts:
+            return True
+    return False
 
 
 def zip_walk(zip_obj, strip_toplevel=True):
@@ -233,6 +243,8 @@ def zip_walk(zip_obj, strip_toplevel=True):
         - tuplas (nombre_archivo, zipinfo_object).
     """
     zip_files = [PurePath(f) for f in zip_obj.namelist()]
+    # Filtramos cualquier cosa relacionada a un .git
+    zip_files = [f for f in zip_files if not is_skippable(f)]
     forbidden_files = [f for f in zip_files if is_forbidden(f)]
     all_parents: Set[PurePath] = set()
     common_parent = "."
@@ -272,6 +284,7 @@ class Moss:
         self._emoji: Optional[str] = None
         shutil.rmtree(self._dest, ignore_errors=True)
         self._dest.mkdir(parents=True)
+        self._git(["rm", "--cached", "-r", self._dest])
 
     def location(self):
         """Directorio donde se guardaron los archivos."""

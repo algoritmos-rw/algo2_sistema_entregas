@@ -1,7 +1,8 @@
 import random
-import time
+from datetime import datetime
+from pytz import timezone
 
-
+BUENOS_AIRES = timezone("America/Argentina/Buenos_Aires")
 VIDA_ACTIVADA = True
 FRIDAY = 4
 SATURDAY = 5
@@ -38,12 +39,12 @@ def vida_corrector(entrega):
     if not VIDA_ACTIVADA:
         return ""
 
-    localtime = time.localtime()
+    localtime = datetime.now(buenos_aires)
     if (
-        (localtime.tm_wday == FRIDAY and localtime.tm_hour >= LIMIT_HOUR)
-        or (localtime.tm_wday == SATURDAY and localtime.tm_hour <= MINIMUM_HOUR)
-        or (localtime.tm_wday == SATURDAY and localtime.tm_hour >= LIMIT_HOUR)
-        or (localtime.tm_wday == SUNDAY and localtime.tm_hour <= MINIMUM_HOUR)
+        (localtime.weekday() == FRIDAY and localtime.hour >= LIMIT_HOUR)
+        or (localtime.weekday() == SATURDAY and localtime.hour <= MINIMUM_HOUR)
+        or (localtime.weekday() == SATURDAY and localtime.hour >= LIMIT_HOUR)
+        or (localtime.weekday() == SUNDAY and localtime.hour <= MINIMUM_HOUR)
     ):
         return random.choice(FRASES_CORRECTOR)(entrega) + "\n\n"
     elif localtime.tm_hour >= LIMIT_HOUR or localtime.tm_hour <= MINIMUM_HOUR:
