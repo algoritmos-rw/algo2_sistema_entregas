@@ -39,7 +39,7 @@ def vida_corrector(entrega):
     if not VIDA_ACTIVADA:
         return ""
 
-    localtime = datetime.now(buenos_aires)
+    localtime = datetime.now(BUENOS_AIRES)
     if (
         (localtime.weekday() == FRIDAY and localtime.hour >= LIMIT_HOUR)
         or (localtime.weekday() == SATURDAY and localtime.hour <= MINIMUM_HOUR)
@@ -47,7 +47,7 @@ def vida_corrector(entrega):
         or (localtime.weekday() == SUNDAY and localtime.hour <= MINIMUM_HOUR)
     ):
         return random.choice(FRASES_CORRECTOR)(entrega) + "\n\n"
-    elif localtime.tm_hour >= LIMIT_HOUR or localtime.tm_hour <= MINIMUM_HOUR:
+    elif localtime.hour >= LIMIT_HOUR or localtime.hour <= MINIMUM_HOUR:
         return "Recordá que dormir es muy importante para la salud\n\n"
     else:
         return ""
