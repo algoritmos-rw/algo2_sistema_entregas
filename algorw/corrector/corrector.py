@@ -225,7 +225,7 @@ def is_forbidden(path):
     )
 
 def is_skippable(path):
-    for ctx in [".git", ".DS_STORE"]:
+    for ctx in [".git", ".DS_Store", "__MACOSX"]:
         if ctx in path.parts:
             return True
     return False
